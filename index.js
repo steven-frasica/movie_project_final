@@ -3,7 +3,7 @@
 async function renderMovies(movies) {
   // replace batman with event.target.value from the onchange of the input search bar
   const detailPromises = movies.map(async (movie) => {
-    console.log('movie', movie)
+    console.log("movie", movie);
     const res = await fetch(
       `https://www.omdbapi.com/?i=${movie.imdbID}&apikey=8ad7256b`,
     );
@@ -24,18 +24,21 @@ async function onSearchChange(event) {
     `https://www.omdbapi.com/?s=${event.target.value}&apikey=8ad7256b`,
   );
   const movies = await response.json();
-  console.log('movies in onSearchChange', movies.Search)
+  console.log("movies in onSearchChange", movies.Search);
   renderMovies(movies.Search);
 }
 
 function showMovieInfo(movies) {
   return `<div class="movie">
-          <div class="movie-card">
+          <div class="movie-card--poster">
             <div class="movie-card__container">
               <figure>
                 <img src="${movies.Poster}" alt="">
                 
               </figure>
+              </div>
+              </div>
+              <div class="movie-card--info">
               <h3>Title: ${movies.Title}</h3>
               <p><b>Director: ${movies.Director}</b></p>
               <p><b>Actors: ${movies.Actors}</b></p>
@@ -43,9 +46,8 @@ function showMovieInfo(movies) {
               <p><b>Genre(s): ${movies.Genre}</b></p>
               <p><b>imdb Rating: ${movies.imdbRating}</b></p>
               <p><b>Type: ${movies.Type.charAt(0).toUpperCase() + movies.Type.slice(1)}</b></p>
-            </div>
-          </div>
-        </div>`;
+              </div>
+          </div>`;
 }
 
 renderMovies();
