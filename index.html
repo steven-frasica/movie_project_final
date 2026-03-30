@@ -10,23 +10,49 @@
   <body>
     <section id="heading">
       <nav></nav>
-      <h2>Check out our Movie Collection</h2>
+      <h1>VISTA</h1>
+      <h2>?</h2>
       <div class="header">
-      <input name="search" placeholder="Type to Search" type="text" oninput="onSearchChange(event)">
-      <select class="filter" name="filter" id="filter" onchange="filterMovies(event.target.value)">
-        <option value="" disabled selected>Sort</option>
-        <option value="NEW_TO_OLD">Most Recent</option>
-        <option value="OLD_TO_NEW">Oldest to Latest</option>
-        <option value="RATING_HIGH_TO_LOW">Rating, High to Low</option>
-        <option value="RATING_LOW_TO_HIGH">Rating, Low to High</option>
-      </select>
+        <input
+          name="search"
+          placeholder="Type to Search"
+          type="text"
+          oninput="onSearchChange(event)"
+        />
+        <select
+          class="filter"
+          name="filter"
+          id="filter"
+          onchange="filterMovies(event.target.value)"
+        >
+          <option value="" disabled selected>Sort</option>
+          <option value="NEW_TO_OLD">Most Recent</option>
+          <option value="OLD_TO_NEW">Oldest to Latest</option>
+          <option value="RATING_HIGH_TO_LOW">Rating, High to Low</option>
+          <option value="RATING_LOW_TO_HIGH">Rating, Low to High</option>
+        </select>
       </div>
     </section>
     <main>
-    <section id="movies">
-      <div class="movie-list">
-      </div>
-    </section>
+      <section id="movies">
+        <div class="movie-list">
+          <i class="fas fa-spinner movies__loading--spinner"></i>
+        </div>
+      </section>
     </main>
+
+    <div id="plot-modal" class="plot-modal" aria-hidden="true">
+      <div class="plot-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="plot-modal-title">
+        <button class="plot-modal__close" type="button" onclick="closePlotModal()" aria-label="Close modal">&times;</button>
+        <div class="plot-modal__content">
+          <img id="plot-modal-poster" class="plot-modal__poster" src="" alt="Movie poster" />
+          <div class="plot-modal__copy">
+            <h3 id="plot-modal-title"></h3>
+            <p id="plot-modal-meta" class="plot-modal__meta"></p>
+            <p id="plot-modal-text" class="plot-modal__text"></p>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
