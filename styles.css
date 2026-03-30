@@ -10,12 +10,21 @@
   --section-gap: clamp(14px, 2.2vw, 24px);
 }
 
+html,
+body {
+  /* Needed for sticky footer technique with flex column layout. */
+  height: 100%;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: "Segoe UI", sans-serif;
   padding: 0;
   box-sizing: border-box;
+  /* Layered gradients build depth instead of a flat background color. */
   background: 
     /* Soft glow near top-left */
     radial-gradient(850px 450px at 8% -10%, #0b417b 10%, transparent 60%),
@@ -23,6 +32,11 @@ body {
     radial-gradient(850px 450px at 92% 0%, #1c65b5 0%, transparent 56%),
     /* Main dark-to-mid blue wash. */
     linear-gradient(160deg, #041a37 0%, #083d77 58%, #052f5f 100%);
+}
+
+main {
+  /* This grows to occupy leftover height, pushing footer to bottom on short pages. */
+  flex: 1;
 }
 
 /* Center each section and apply responsive horizontal gutter */
@@ -33,6 +47,7 @@ section {
 }
 
 #heading {
+  /* Top spacing for hero text + controls; left gutter inherited from section. */
   padding: var(--section-gap) 0 calc(var(--section-gap) - 6px) var(--gutter);
 }
 
@@ -42,19 +57,92 @@ h1 {
   letter-spacing: 0.1em;
   font-size: 2.25rem;
   color: #7ee8ff;
+  background: linear-gradient(120deg, #7ee8ff 0%, #63f0dc 45%, #4ab7d8 78%, #2f8eb3 100%);
+  /* Gradient text effect: clip background to glyphs. */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
 }
 /* Main page headline with responsive sizing */
 h2 {
   margin: 8px 0 clamp(12px, 2vw, 20px);
-  font-size: clamp(1.35rem, 3vw, 2.1rem);
-  color: #a6a0a0;
+  font-size: clamp(1.35rem, 1vw, 2.1rem);
+  color: #bdb9c0;
+  background: linear-gradient(120deg, #d4d1d8 0%, #b8b3bc 48%, #8e8a94 100%);
+  /* Keep subtitle more subdued than h1 while preserving themed gradient. */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* search & filter row */
 .header {
+  /* Flex-wrap keeps controls usable when width is constrained. */
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+/* FOOTER */
+
+footer {
+  /* Footer uses matching maroon atmospheric gradients to complement body blues. */
+  background:
+    radial-gradient(700px 320px at 12% 0%, rgba(130, 49, 76, 0.62) 0%, transparent 62%),
+    radial-gradient(680px 300px at 88% 8%, rgba(102, 35, 58, 0.58) 0%, transparent 60%),
+    linear-gradient(165deg, #2a1322 0%, #5a2436 52%, #3b1b2f 100%);
+  margin-top: auto;
+  padding: 8px 0 12px;
+}
+
+.row {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.row__column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer__logo {
+  display: flex;
+}
+
+.footer__link,
+.footer__copyright {
+  color: #f4c8d8;
+}
+
+.footer__list {
+  margin: 14px 0 18px 0;
+}
+
+.footer__link {
+  padding: 0 8px;
+}
+
+.footer__attribution {
+  margin-top: 10px;
+  padding: 6px 0 2px;
+  text-decoration: none;
+  color: #f4c8d8;
+}
+
+.footer__logo {
+  display: flex;
+  height: 92px;
+  padding: 6px 0;
+}
+
+.footer__img {
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+  filter: invert(88%) sepia(14%) saturate(768%) hue-rotate(292deg) brightness(101%) contrast(96%);
 }
 
 /* Search bar and filter select */
@@ -94,6 +182,7 @@ img {
 }
 
 .movie-list {
+  /* 6-column desktop grid that collapses through media queries below. */
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: clamp(8px, 1.2vw, 14px);
@@ -102,19 +191,28 @@ img {
 }
 
 .movie-list__message {
+  /* Empty-state card styling (text gradient is on inner span). */
   grid-column: 1 / -1;
   height: 3rem;
   padding: 14px;
   text-align: center;
   font-size: 1.125rem;
   font-weight: 600;
-  color: #a6a0a0;
   background: #ffffff14;
   border: 1px solid #7ee8ff73;
   border-radius: 12px;
 }
 
+.movie-list__message-text {
+  color: #b7b2bc;
+  background: #b7b2bc;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .movie-list__loading {
+  /* Full-row loading UI centered inside the grid. */
   grid-column: 1 / -1;
   min-height: 180px;
   display: grid;
@@ -153,6 +251,7 @@ figure,
 }
 
 .movie-card__container {
+  /* 2:3 frame keeps poster cards consistent before images fully load. */
   aspect-ratio: 2/3;
   display: grid;
   place-items: center;
@@ -164,6 +263,7 @@ figure,
   overflow: hidden;
   box-shadow: 0 14px 28px #0007127a;
   transition: transform 0.2s ease;
+  /* Hint the compositor for smoother hover transforms. */
   will-change: transform;
 }
 
@@ -190,9 +290,10 @@ figure,
   color: #f4f8ff;
   background: linear-gradient(
     180deg,
-    rgba(4, 23, 49, 0.94),
-    rgba(8, 48, 95, 0.92)
+    rgba(42, 19, 34, 0.94),
+    rgba(90, 36, 54, 0.92)
   );
+  /* Hidden by default; revealed by parent hover for stable interaction. */
   transform: translateY(10px);
   opacity: 0;
   transition:
@@ -203,6 +304,7 @@ figure,
 }
 
 .plot-modal {
+  /* Full-screen backdrop that dims the page behind dialog content. */
   position: fixed;
   inset: 0;
   display: none;
@@ -238,10 +340,15 @@ figure,
   padding: 18px;
   border-radius: 12px;
   border: 1px solid rgba(126, 232, 255, 0.35);
-  background: linear-gradient(170deg, #082952, #0a3e79);
+  background: linear-gradient(
+    180deg,
+    rgba(42, 19, 34, 0.94),
+    rgba(90, 36, 54, 0.92)
+  );
 }
 
 .plot-modal__content {
+  /* Desktop layout: poster + text side-by-side. */
   display: grid;
   grid-template-columns: minmax(160px, 220px) 1fr;
   gap: 16px;
@@ -287,6 +394,7 @@ figure,
 
 @media (max-width: 760px) {
   .plot-modal__content {
+    /* Stack modal content vertically on smaller screens. */
     grid-template-columns: 1fr;
   }
 
@@ -298,12 +406,14 @@ figure,
 
 @media (max-width: 1100px) {
   .movie-list {
+    /* 6 -> 3 columns for medium screens. */
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 760px) {
   .movie-list {
+    /* 3 -> 2 columns for tablets/small laptops. */
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -316,6 +426,7 @@ figure,
 
 @media (max-width: 480px) {
   .movie-list {
+    /* Single-column stack on narrow phones. */
     grid-template-columns: 1fr;
   }
 }

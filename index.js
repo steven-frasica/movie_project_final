@@ -1,8 +1,13 @@
+// App state shared across handlers.
+// - movies: lightweight search results from OMDB `s=` endpoint.
+// - detailedMovies: enriched movie objects from OMDB `i=` endpoint.
 let movies = [];
 let detailedMovies = [];
 let searchDebounceTimer;
 let latestSearchId = 0;
 
+// Converts raw OMDB error messages into friendlier UI text.
+// This keeps API wording separate from user-facing wording.
 function mapOmdbErrorMessage(errorMessage) {
   if (!errorMessage) return "No matches found.";
 
@@ -31,6 +36,7 @@ function setLoading(isLoading, message = "Loading movies...") {
   const movieListEl = document.querySelector(".movie-list");
   const filterEl = document.querySelector("#filter");
 
+  // Render a full-row loading state into the grid container.
   if (isLoading) {
     movieListEl.innerHTML = `
       <div class="movie-list__loading" role="status" aria-live="polite">
@@ -40,14 +46,16 @@ function setLoading(isLoading, message = "Loading movies...") {
     `;
   }
 
+  // Keep sorting control disabled while loading to avoid conflicting re-sorts.
   if (filterEl) filterEl.disabled = isLoading;
 }
 
 async function renderMovies(movies, message = "No movies found.") {
   const movieListEl = document.querySelector(".movie-list");
   
+  // Empty state: helpful message instead of a blank grid.
   if (!movies.length) {
-    movieListEl.innerHTML = `<p class="movie-list__message">${message}</p>`;
+    movieListEl.innerHTML = `<p class="movie-list__message"><span class="movie-list__message-text">${message}</span></p>`;
     return;
   }
 
@@ -56,8 +64,10 @@ async function renderMovies(movies, message = "No movies found.") {
 
 async function onSearchChange(event) {
   const query = event.target.value.trim();
+  // Each keystroke gets a unique id so we can ignore stale responses later.
   const searchId = ++latestSearchId;
 
+  // Debounce prevents firing API requests on every single key press.
   clearTimeout(searchDebounceTimer);
 
   if (!query) {
@@ -78,6 +88,7 @@ async function runSearch(query, searchId) {
   }
 
   try {
+    // First request: fetch a list of matching titles.
     const response = await fetch(
       `https://www.omdbapi.com/?s=${encodeURIComponent(query)}&apikey=92fb2c25`,
     );
@@ -101,6 +112,9 @@ async function runSearch(query, searchId) {
       return;
     }
 
+    // Second stage: fetch full details for each movie card.
+    // We keep each request in its own try/catch so one failure
+    // does not break the whole batch (no all-or-nothing failure).
     const detailPromises = movies.slice(0, 6).map(async (movie) => {
       try {
       const res = await fetch(
@@ -114,6 +128,7 @@ async function runSearch(query, searchId) {
 
       return data;
     } catch {
+      // Fallback to the lighter movie object when details fail.
       return movie;
     }
     });
@@ -143,6 +158,7 @@ function filterMovies(filterValue) {
 
   setLoading(true, "Sorting...");
 
+  // requestAnimationFrame allows the loading state to paint before sort work runs.
   requestAnimationFrame(() => {
     let sortedMovies;
     if (filterValue === "NEW_TO_OLD") {
@@ -179,11 +195,13 @@ function filterMovies(filterValue) {
 }
 
 function showMovieInfo(movie) {
+  // Defensive formatting for movie type when OMDB fields are missing.
   const movieType =
     movie.Type && movie.Type !== "N/A"
       ? movie.Type.charAt(0).toUpperCase() + movie.Type.slice(1)
       : "Unknown";
 
+  // Template literal returns one full card. Render step joins all cards together.
   return `<div class="movie">
           <div class="movie-card--poster" onclick="openPlotModal('${movie.imdbID}')">
              <div class="movie-card__container">
@@ -205,6 +223,7 @@ function showMovieInfo(movie) {
 }
 
 function openPlotModal(imdbID) {
+  // Find the clicked movie from current detailed list.
   const movie = detailedMovies.find((item) => item.imdbID === imdbID);
   if (!movie) return;
   
@@ -214,6 +233,7 @@ function openPlotModal(imdbID) {
   const meta = document.querySelector("#plot-modal-meta");
   const text = document.querySelector("#plot-modal-text");
 
+  // Fallback poster avoids broken image icons for N/A values.
   const posterSrc =
     movie.Poster && movie.Poster !== "N/A"
       ? movie.Poster
@@ -226,6 +246,7 @@ function openPlotModal(imdbID) {
   meta.textContent = `${movie.Released || "Unknown"} - ${movie.Genre || "Unknown Genre"}`;
   text.textContent = movie.Plot && movie.Plot !== "N/A" ? movie.Plot : "Plot description unavailable.";
 
+  // Toggle modal visibility state and accessibility attribute together.
   modal.classList.add("plot-modal--open");
   modal.setAttribute("aria-hidden", "false");
 }
@@ -238,6 +259,7 @@ function closePlotModal() {
 
 document.addEventListener("click", (event) => {
   const modal = document.querySelector("#plot-modal");
+  // Close only when clicking backdrop, not when clicking dialog content.
   if (event.target === modal) closePlotModal();
 });
 

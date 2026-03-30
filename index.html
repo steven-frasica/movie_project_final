@@ -8,17 +8,19 @@
     <script src="index.js" defer></script>
   </head>
   <body>
+    <!-- Header area: branding + user controls for searching and sorting movies. -->
     <section id="heading">
-      <nav></nav>
       <h1>VISTA</h1>
-      <h2>?</h2>
+      <h2>Pick your next film</h2>
       <div class="header">
+        <!-- Search input uses oninput for live search as the user types. -->
         <input
           name="search"
           placeholder="Type to Search"
           type="text"
           oninput="onSearchChange(event)"
         />
+        <!-- Sort dropdown changes ordering of already-fetched movie details. -->
         <select
           class="filter"
           name="filter"
@@ -34,18 +36,50 @@
       </div>
     </section>
     <main>
+      <!-- Movie results are injected dynamically by JavaScript into .movie-list. -->
       <section id="movies">
         <div class="movie-list">
           <i class="fas fa-spinner movies__loading--spinner"></i>
         </div>
       </section>
     </main>
-
+    <footer>
+      <!-- Footer contains branding/copyright and attribution for icon usage. -->
+      <div class="container">
+        <div class="row row__column">
+          <a href="#">
+            <figure class="footer__logo">
+              <img class="footer__img" src="./assets/movie.png" alt="" />
+            </figure>
+          </a>
+          <div class="footer__copyright">Copyright © 2026 VISTA Steven Frasica</div>
+          <a class="footer__attribution" href="https://www.flaticon.com/free-icons/movie" title="movie icons">Movie icons created by Freepik - Flaticon</a>
+        </div>
+      </div>
+    </footer>
+    <!-- Modal is hidden by default; JS fills its content and toggles visibility. -->
     <div id="plot-modal" class="plot-modal" aria-hidden="true">
-      <div class="plot-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="plot-modal-title">
-        <button class="plot-modal__close" type="button" onclick="closePlotModal()" aria-label="Close modal">&times;</button>
+      <div
+        class="plot-modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="plot-modal-title"
+      >
+        <button
+          class="plot-modal__close"
+          type="button"
+          onclick="closePlotModal()"
+          aria-label="Close modal"
+        >
+          &times;
+        </button>
         <div class="plot-modal__content">
-          <img id="plot-modal-poster" class="plot-modal__poster" src="" alt="Movie poster" />
+          <img
+            id="plot-modal-poster"
+            class="plot-modal__poster"
+            src=""
+            alt="Movie poster"
+          />
           <div class="plot-modal__copy">
             <h3 id="plot-modal-title"></h3>
             <p id="plot-modal-meta" class="plot-modal__meta"></p>
