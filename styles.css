@@ -8,7 +8,7 @@
   /* clamp(min, preferred, max) */
   /* Side padding for page sections, makes it responsive */
   --gutter: clamp(28px, 4vw, 56px);
-  /* Vertical spacing for heading, makes it responsive */
+  /* Vertical spacing for the hero area, makes it responsive */
   --section-gap: clamp(14px, 2.2vw, 24px);
 }
 
@@ -49,9 +49,9 @@ section {
   max-width: 1520px;
 }
 
-#heading {
+.hero {
   margin: 0;
-  /* Use the same horizontal geometry as movie section for exact left-edge alignment. */
+  /* Keep the hero aligned with the movie results section. */
   padding-top: var(--section-gap);
   padding-right: var(--gutter);
   padding-bottom: calc(var(--section-gap) - 6px);
@@ -93,15 +93,15 @@ h2 {
   -webkit-text-fill-color: transparent;
 }
 
-/* search & filter row */
-.header {
+/* Search input and sort control row. */
+.hero__controls {
   /* Flex-wrap keeps controls usable when width is constrained. */
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
 }
 
-.search-input-wrapper {
+.search-bar {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -131,14 +131,14 @@ footer {
   padding: 8px 0 12px;
 }
 
-.row {
+.footer__inner {
   /* Shared centered wrapper. */
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.row__column {
+.footer__stack {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -183,9 +183,9 @@ footer {
     brightness(90%) contrast(92%);
 }
 
-/* Search bar and filter select */
+/* Search bar and sort select */
 input,
-.filter {
+.sort-select {
   /* Shared visual treatment keeps both controls in the same design system. */
   color: #b6d9e7;
   background-color: transparent;
@@ -206,7 +206,7 @@ input::placeholder {
   color: #a9d9e6;
 }
 
-.search-clear-button {
+.search-bar__clear {
   position: absolute;
   right: 0.15rem;
   top: 50%;
@@ -221,12 +221,12 @@ input::placeholder {
   cursor: pointer;
 }
 
-.search-input-wrapper input:placeholder-shown + .search-clear-button {
+.search-bar input:placeholder-shown + .search-bar__clear {
   opacity: 0;
   pointer-events: none;
 }
 
-.search-clear-button:hover {
+.search-bar__clear:hover {
   color: #d2deed;
 }
 
@@ -248,7 +248,7 @@ img {
   transition: transform 0.2s ease;
 }
 
-.movie-list {
+.movie-grid {
   /* 6-column desktop grid that collapses through media queries below. */
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -258,7 +258,7 @@ img {
   padding-bottom: clamp(16px, 2.8vw, 30px);
 }
 
-.movie-list__message {
+.movie-grid__message {
   /* Empty-state card styling (text gradient is on inner span). */
   grid-column: 1 / -1;
   min-height: 72px;
@@ -277,13 +277,13 @@ img {
   box-shadow: 0 10px 26px rgba(0, 6, 18, 0.35);
 }
 
-.movie-list__message-body {
+.movie-grid__message-body {
   display: inline-flex;
   align-items: center;
   gap: 10px;
 }
 
-.movie-list__message-icon {
+.movie-grid__message-icon {
   width: 20px;
   height: 20px;
   display: inline-flex;
@@ -300,7 +300,7 @@ img {
   box-shadow: 0 0 0 1px rgba(6, 18, 36, 0.35) inset;
 }
 
-.movie-list__message-text {
+.movie-grid__message-text {
   color: #a9d9e6;
   font-size: 1.05rem;
   font-weight: 600;
@@ -311,7 +311,7 @@ img {
   -webkit-text-fill-color: initial;
 }
 
-.movie-list__loading {
+.movie-grid__loading {
   /* Full-row loading UI centered inside the grid. */
   grid-column: 1 / -1;
   min-height: 180px;
@@ -321,7 +321,7 @@ img {
   color: #cfe7ff;
 }
 
-.movie-list__loading p {
+.movie-grid__loading p {
   margin: 0;
 }
 
@@ -341,7 +341,7 @@ img {
   }
 }
 
-.movie {
+.movie-card {
   /* Relative positioning creates the containing block for the info overlay. */
   /* Because the info panel is absolutely positioned, it anchors to this card. */
   position: relative;
@@ -351,12 +351,12 @@ img {
 }
 
 figure,
-.movie-card__container {
+.movie-card__media {
   margin: 0;
   width: 100%;
 }
 
-.movie-card__container {
+.movie-card__media {
   /* 2:3 frame, larger posters for better visibility. */
   aspect-ratio: 2/3;
   display: grid;
@@ -366,18 +366,18 @@ figure,
   cursor: pointer;
 }
 
-.movie:hover img {
+.movie-card:hover img {
   transform: translateY(-2px) scale(1.03);
 }
 
 /* Reveal info panel while hovering anywhere on the card. */
-.movie:hover .movie-card--info {
+.movie-card:hover .movie-card__details {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
 }
 
-.movie-card--info {
+.movie-card__details {
   /* Hidden overlay that fades in over the poster on hover. */
   /* This is an example of progressive disclosure: details stay hidden until needed. */
   position: absolute;
@@ -407,12 +407,12 @@ figure,
   cursor: pointer;
 }
 
-.movie-card--info h3,
-.movie-card--info p {
+.movie-card__details h3,
+.movie-card__details p {
   overflow-wrap: anywhere;
 }
 
-.plot-modal {
+.movie-details-modal {
   /* Full-screen backdrop that dims the page behind dialog content. */
   /* display:none keeps it out of layout until JS toggles the open class. */
   position: fixed;
@@ -425,24 +425,24 @@ figure,
   z-index: 1000;
 }
 
-.movie-card--info h3 {
+.movie-card__details h3 {
   margin: 0 0 8px;
   font-size: 0.95rem;
 }
 
-.movie-card--info p {
+.movie-card__details p {
   margin: 0 0 6px;
   font-size: 0.77rem;
   line-height: 1.35;
 }
 
 /* Toggled on in JS to show modal. */
-.plot-modal--open {
+.movie-details-modal--open {
   display: flex;
 }
 
 /* modal content */
-.plot-modal__dialog {
+.movie-details-modal__dialog {
   /* width:min(...) keeps the modal readable without overflowing the viewport. */
   color: #fff;
   width: min(980px, 100%);
@@ -458,7 +458,7 @@ figure,
   );
 }
 
-.plot-modal__content {
+.movie-details-modal__content {
   /* Desktop layout: poster + text side-by-side. */
   /* CSS Grid is a good fit here because the modal has two explicit columns. */
   display: grid;
@@ -467,7 +467,7 @@ figure,
   align-items: start;
 }
 
-.plot-modal__poster {
+.movie-details-modal__poster {
   /* Reuse the same poster ratio inside the modal. */
   width: 100%;
   max-width: 100%;
@@ -477,12 +477,12 @@ figure,
   border: 1px solid rgba(126, 232, 255, 0.28);
 }
 
-.plot-modal__copy {
+.movie-details-modal__body {
   /* Prevent long text from forcing the grid wider than the modal allows. */
   min-width: 0;
 }
 
-.plot-modal__close {
+.movie-details-modal__close {
   float: right;
   border: 0;
   background: transparent;
@@ -492,33 +492,33 @@ figure,
 }
 
 /* Modal text spacing/color */
-.plot-modal__dialog h3 {
+.movie-details-modal__dialog h3 {
   margin: 0 0 6px;
 }
 
-.plot-modal__meta {
+.movie-details-modal__meta {
   margin: 10px 0 12px;
   color: #cbd6e4;
   font-size: 0.9rem;
 }
 
 /* Style each field in the modal to appear on its own line with spacing */
-.plot-modal__meta div,
-.plot-modal__runtime div,
-.plot-modal__cast div {
+.movie-details-modal__meta div,
+.movie-details-modal__runtime div,
+.movie-details-modal__cast div {
   /* Treat each labeled detail as a separate row for readability. */
   margin-bottom: 6px;
   line-height: 1.5;
 }
 
-.plot-modal__runtime {
+.movie-details-modal__runtime {
   margin: 0 0 10px;
   color: #d4ddeb;
   font-size: 0.92rem;
   font-weight: 500;
 }
 
-.plot-modal__cast {
+.movie-details-modal__cast {
   margin: 0 0 12px;
   color: #dce5f1;
   font-size: 0.95rem;
@@ -526,7 +526,7 @@ figure,
   letter-spacing: 0.01em;
 }
 
-.plot-modal__text {
+.movie-details-modal__text {
   margin: 0 0 12px;
   color: #dce5f1;
   font-size: 0.95rem;
@@ -534,51 +534,51 @@ figure,
   letter-spacing: 0.01em;
 }
 
-.plot-modal__container {
+.movie-details-modal__plot {
   /* Flex keeps the Plot label and paragraph aligned on one row. */
   display: flex;
 }
 
-.plot-modal__para {
+.movie-details-modal__plot-text {
   /* Remove the default paragraph top margin so it lines up with the Plot label. */
   margin-top: 0;
   margin-left: 0.5rem;
 }
 
 @media (max-width: 760px) {
-  .plot-modal__content {
+  .movie-details-modal__content {
     /* Stack modal content vertically on smaller screens. */
     grid-template-columns: 1fr;
   }
 
-  .plot-modal__poster {
+  .movie-details-modal__poster {
     max-width: 260px;
     justify-self: center;
   }
 }
 
 @media (max-width: 1100px) {
-  .movie-list {
+  .movie-grid {
     /* 6 -> 3 columns for medium screens. */
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 760px) {
-  .movie-list {
+  .movie-grid {
     /* 3 -> 2 columns for tablets/small laptops. */
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .movie-card--info {
+  .movie-card__details {
     padding: 9px;
   }
 
-  .movie-card--info h3 {
+  .movie-card__details h3 {
     font-size: 0.88rem;
   }
 
-  .movie-card--info p {
+  .movie-card__details p {
     font-size: 0.72rem;
     line-height: 1.28;
   }
@@ -592,7 +592,7 @@ figure,
 }
 
 @media (max-width: 480px) {
-  .movie-list {
+  .movie-grid {
     /* Single-column stack on narrow phones. */
     grid-template-columns: 1fr;
   }
@@ -600,7 +600,7 @@ figure,
 
 /* Larger posters on desktop (6-column layout) */
 @media (min-width: 1101px) {
-  .movie-list {
+  .movie-grid {
     /* Give desktop cards a taller baseline row height. */
     grid-auto-rows: minmax(380px, auto);
   }

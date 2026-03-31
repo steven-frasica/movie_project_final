@@ -9,12 +9,12 @@
     <script src="index.js" defer></script>
   </head>
   <body>
-    <!-- Hero section: brand, search input, and sort control. -->
-    <section id="heading">
+    <!-- Hero header: brand, search input, and sort control. -->
+    <header class="hero">
       <h1>Theater6</h1>
       <h2>Choose Your Next Experience</h2>
-      <div class="header">
-        <div class="search-input-wrapper">
+      <div class="hero__controls">
+        <div class="search-bar">
           <input
             id="search-input"
             name="search"
@@ -23,7 +23,7 @@
             oninput="onSearchChange(event)"
           />
           <button
-            class="search-clear-button"
+            class="search-bar__clear"
             type="button"
             onclick="clearSearchInput()"
             aria-label="Clear search"
@@ -32,10 +32,10 @@
           </button>
         </div>
         <select
-          class="filter"
-          name="filter"
-          id="filter"
-          onchange="filterMovies(event.target.value)"
+          class="sort-select"
+          name="sort"
+          id="sort-select"
+          onchange="sortMovies(event.target.value)"
         >
           <option value="" disabled selected>Sort</option>
           <option value="NEW_TO_OLD">Newest First</option>
@@ -44,18 +44,18 @@
           <option value="RATING_LOW_TO_HIGH">Rating, Low to High</option>
         </select>
       </div>
-    </section>
+    </header>
     <main>
       <!-- JavaScript replaces this container with loading, empty, or movie-card states. -->
-      <section id="movies">
-        <div class="movie-list">
+      <section id="movie-results" class="movie-results">
+        <div class="movie-grid">
           <i class="fas fa-spinner movies__loading--spinner"></i>
         </div>
       </section>
     </main>
     <footer>
-      <div class="container">
-        <div class="row row__column">
+      <div class="footer__inner">
+        <div class="footer__stack">
           <div>
             <figure class="footer__logo">
               <img class="footer__img" src="./assets/movie.png" alt="" />
@@ -76,35 +76,51 @@
     </footer>
 
     <!-- Modal dialog used to show the selected movie's expanded details. -->
-    <div id="plot-modal" class="plot-modal" aria-hidden="true">
+    <div
+      id="movie-details-modal"
+      class="movie-details-modal"
+      aria-hidden="true"
+    >
       <div
-        class="plot-modal__dialog"
+        class="movie-details-modal__dialog"
         role="dialog"
         aria-modal="true"
-        aria-labelledby="plot-modal-title"
+        aria-labelledby="movie-details-modal-title"
       >
         <button
-          class="plot-modal__close"
+          class="movie-details-modal__close"
           type="button"
-          onclick="closePlotModal()"
+          onclick="closeMovieDetailsModal()"
           aria-label="Close modal"
         >
           &times;
         </button>
-        <div class="plot-modal__content">
+        <div class="movie-details-modal__content">
           <img
-            id="plot-modal-poster"
-            class="plot-modal__poster"
+            id="movie-details-modal-poster"
+            class="movie-details-modal__poster"
             src=""
             alt="Movie poster"
           />
-          <div class="plot-modal__copy">
-            <h3 id="plot-modal-title"></h3>
+          <div class="movie-details-modal__body">
+            <h3 id="movie-details-modal-title"></h3>
             <!-- These placeholders are filled by JavaScript when a card is opened. -->
-            <p id="plot-modal-meta" class="plot-modal__meta"></p>
-            <p id="plot-modal-runtime" class="plot-modal__runtime"></p>
-            <p id="plot-modal-cast" class="plot-modal__cast"></p>
-            <p id="plot-modal-text" class="plot-modal__text"></p>
+            <div
+              id="movie-details-modal-meta"
+              class="movie-details-modal__meta"
+            ></div>
+            <div
+              id="movie-details-modal-runtime"
+              class="movie-details-modal__runtime"
+            ></div>
+            <div
+              id="movie-details-modal-cast"
+              class="movie-details-modal__cast"
+            ></div>
+            <div
+              id="movie-details-modal-text"
+              class="movie-details-modal__text"
+            ></div>
           </div>
         </div>
       </div>
