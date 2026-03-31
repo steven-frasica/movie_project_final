@@ -47,30 +47,26 @@ section {
 }
 
 #heading {
-  margin: 0 auto;
+  margin: 0;
   /* Use the same horizontal geometry as movie section for exact left-edge alignment. */
   padding-top: var(--section-gap);
   padding-right: var(--gutter);
   padding-bottom: calc(var(--section-gap) - 6px);
-  padding-left: 200px;
-}
-
-.search {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-decoration: none;
-  transform: none;
+  padding-left: var(--gutter);
 }
 
 /* Site name */
+/*
+  Site name (main headline):
+  - Aquamarine/teal gradient for Theater6 branding
+  - Responsive size and subtle shadow for readability
+*/
 h1 {
   margin: 0;
   letter-spacing: 0.1em;
   font-size: 2.25rem;
-  color: #7ee8ff;
-  background: linear-gradient(120deg, #7ee8ff 0%, #63f0dc 45%, #4ab7d8 78%, #2f8eb3 100%);
-  /* Gradient text effect: clip background to glyphs. */
+  color: #63f0dc;
+  background: linear-gradient(120deg, #7ee8ff 0%, #63f0dc 40%, #1de9b6 80%, #00bfae 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -99,11 +95,11 @@ h2 {
 /* FOOTER */
 
 footer {
-  /* Footer uses matching maroon atmospheric gradients to complement body blues. */
+  /* Footer now matches the blue family used by the message bar. */
   background:
-    radial-gradient(700px 320px at 12% 0%, rgba(130, 49, 76, 0.62) 0%, transparent 62%),
-    radial-gradient(680px 300px at 88% 8%, rgba(102, 35, 58, 0.58) 0%, transparent 60%),
-    linear-gradient(165deg, #2a1322 0%, #5a2436 52%, #3b1b2f 100%);
+    radial-gradient(700px 320px at 12% 0%, rgba(34, 78, 122, 0.26) 0%, transparent 62%),
+    radial-gradient(680px 300px at 88% 8%, rgba(24, 60, 100, 0.22) 0%, transparent 60%),
+    linear-gradient(165deg, rgba(10, 26, 48, 0.95) 0%, rgba(20, 43, 70, 0.9) 100%);
   margin-top: auto;
   padding: 8px 0 12px;
 }
@@ -126,7 +122,7 @@ footer {
 
 .footer__link,
 .footer__copyright {
-  color: #f4c8d8;
+  color: #a9d9e6;
 }
 
 .footer__list {
@@ -142,7 +138,7 @@ footer {
   font-size: 12px;
   padding: 6px 0 2px;
   text-decoration: none;
-  color: #f4c8d8;
+  color: #a9d9e6;
 }
 
 .footer__logo {
@@ -155,7 +151,11 @@ footer {
   width: 100%;
   height: auto;
   border-radius: 0;
-  filter: invert(88%) sepia(14%) saturate(768%) hue-rotate(292deg) brightness(101%) contrast(96%);
+  /*
+    Footer logo color filter: tuned to match footer text (#a9d9e6).
+    This filter is for a white or light base logo.
+  */
+  filter: invert(81%) sepia(16%) saturate(1042%) hue-rotate(170deg) brightness(97%) contrast(92%);
 }
 
 /* Search bar and filter select */
@@ -168,7 +168,7 @@ input,
   border-left: none;
   border-bottom: 1px solid white;
   margin: 2px;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 input {
@@ -300,10 +300,11 @@ figure,
 }
 
 .movie-card__container {
-  /* 2:3 frame keeps poster cards consistent before images fully load. */
+  /* 2:3 frame, larger posters for better visibility. */
   aspect-ratio: 2/3;
   display: grid;
   place-items: center;
+  min-height: 260px;
 }
 
 .movie-card--poster {
@@ -339,10 +340,11 @@ figure,
   padding: 11px;
   border-radius: 10px;
   color: #f4f8ff;
+  border: 1px solid rgba(126, 232, 255, 0.28);
   background: linear-gradient(
     180deg,
-    rgba(42, 19, 34, 0.94),
-    rgba(90, 36, 54, 0.92)
+    rgba(10, 26, 48, 0.95),
+    rgba(20, 43, 70, 0.92)
   );
   /* Hidden by default; revealed by parent hover for stable interaction. */
   transform: translateY(10px);
@@ -395,11 +397,11 @@ figure,
   overflow: auto;
   padding: 18px;
   border-radius: 12px;
-  border: 1px solid rgba(126, 232, 255, 0.35);
+  border: 1px solid rgba(126, 232, 255, 0.28);
   background: linear-gradient(
     180deg,
-    rgba(42, 19, 34, 0.94),
-    rgba(90, 36, 54, 0.92)
+    rgba(10, 26, 48, 0.96),
+    rgba(20, 43, 70, 0.93)
   );
 }
 
@@ -413,10 +415,11 @@ figure,
 
 .plot-modal__poster {
   width: 100%;
+  max-width: 320px;
   aspect-ratio: 2 / 3;
   object-fit: cover;
   border-radius: 10px;
-  border: 1px solid rgba(126, 232, 255, 0.35);
+  border: 1px solid rgba(126, 232, 255, 0.28);
 }
 
 .plot-modal__copy {
@@ -439,8 +442,23 @@ figure,
 
 .plot-modal__meta {
   margin: 10px 0 12px;
-  color: #c5ddf8;
+  color: #cbd6e4;
   font-size: 0.9rem;
+}
+
+.plot-modal__runtime {
+  margin: 0 0 10px;
+  color: #d4ddeb;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.plot-modal__cast {
+  margin: 0 0 12px;
+  color: #dce5f1;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
 .plot-modal__text {
@@ -503,6 +521,6 @@ figure,
 /* Larger posters on desktop (6-column layout) */
 @media (min-width: 1101px) {
   .movie-list {
-    grid-auto-rows: minmax(320px, auto);
+    grid-auto-rows: minmax(380px, auto);
   }
 }
