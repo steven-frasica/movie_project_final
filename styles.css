@@ -5,7 +5,7 @@
 
 :root {
   /* These custom properties act like reusable design tokens. */
-  /* clamp(min, preferred, max) */
+  /* clamp(min, preferred, max) keeps values responsive without extra media queries. */
   /* Side padding for page sections, makes it responsive */
   --gutter: clamp(28px, 4vw, 56px);
   /* Vertical spacing for the hero area, makes it responsive */
@@ -250,6 +250,7 @@ img {
 
 .movie-grid {
   /* 6-column desktop grid that collapses through media queries below. */
+  /* Grid is a good fit because the layout is two-dimensional: rows and columns both matter. */
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   align-items: start;
@@ -444,6 +445,7 @@ figure,
 /* modal content */
 .movie-details-modal__dialog {
   /* width:min(...) keeps the modal readable without overflowing the viewport. */
+  /* max-height plus overflow:auto ensures long plots remain scrollable. */
   color: #fff;
   width: min(980px, 100%);
   max-height: 80vh;
@@ -536,6 +538,7 @@ figure,
 
 .movie-details-modal__plot {
   /* Flex keeps the Plot label and paragraph aligned on one row. */
+  /* This is a simple one-dimensional layout, so flex is more appropriate than grid here. */
   display: flex;
 }
 

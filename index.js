@@ -1,5 +1,7 @@
 
-// App state shared across handlers:
+// App state shared across handlers.
+// Keeping it at file scope makes the data accessible to search, sort, and modal logic.
+// In a larger app, this would usually move into a dedicated state/store layer.
 // - searchResults: lightweight search results from OMDB `s=` endpoint
 // - movieDetails: enriched movie objects from OMDB `i=` endpoint
 let searchResults = [];
@@ -14,6 +16,9 @@ let latestSearchId = 0;
 // 2. Fetch data from the OMDb API.
 // 3. Normalize/sort the data in memory.
 // 4. Render the current UI state back into the DOM.
+//
+// That sequence is worth understanding for interviews because it describes
+// how many client-side apps work even when the tooling is more advanced.
 
 // Converts raw OMDB error messages into friendlier UI text.
 // Keeps API wording separate from user-facing wording.
@@ -30,7 +35,9 @@ function mapOmdbErrorMessage(errorMessage) {
   return errorMessage;
 }
 
-// Shows or hides the loading spinner/message in the movie grid.
+// Shows or hides the loading state inside the movie grid.
+// This is a small example of UI state: the underlying movie data may not change,
+// but the interface still needs to communicate that work is happening.
 function setLoading(isLoading, message = "Loading movies...") {
   // Query the two UI nodes that change during loading.
   const movieGridEl = document.querySelector(".movie-grid");
@@ -48,7 +55,9 @@ function setLoading(isLoading, message = "Loading movies...") {
   if (sortSelectEl) sortSelectEl.disabled = isLoading;
 }
 
-// Renders the movie grid or an empty-state message.
+// Renders either movie cards or an empty-state message.
+// The important idea is that the DOM is re-derived from the current state
+// instead of manually tweaking lots of small elements.
 async function renderMovieGrid(moviesToRender, message = "No movies found.") {
   // This one container is the render target for every page state.
   const movieGridEl = document.querySelector(".movie-grid");
@@ -69,6 +78,8 @@ async function renderMovieGrid(moviesToRender, message = "No movies found.") {
 }
 
 async function onSearchChange(event) {
+  // This handler is wired directly from the input element in index.html.
+  // It is responsible only for orchestrating search timing, not rendering details.
   // event.target is the <input>, so its current value is the live search text.
   // Normalize the input so accidental spaces do not trigger bad searches.
   const query = event.target.value.trim();
@@ -91,6 +102,7 @@ async function onSearchChange(event) {
 }
 
 function clearSearchInput() {
+  // Clear both the visible input and the in-memory state so the UI and data stay in sync.
   const searchInput = document.querySelector("#search-input");
   if (!searchInput) return;
   clearTimeout(searchDebounceTimer);
@@ -103,6 +115,8 @@ function clearSearchInput() {
 }
 
 async function runSearch(query, searchId) {
+  // This function is the app's async data pipeline.
+  // It fetches search results first, then fetches richer movie details for each match.
   // Only the newest search request is allowed to control the loading state.
   if (searchId === latestSearchId) {
     setLoading(true, "Searching movies...");
@@ -152,6 +166,7 @@ async function runSearch(query, searchId) {
       }
     });
     // Resolve all detail requests concurrently instead of one at a time.
+    // Promise.all improves total wait time because the requests run in parallel.
     movieDetails = await Promise.all(detailPromises);
 
     // Sorting is applied after details load because fields like rating/runtime live there.
@@ -176,6 +191,8 @@ async function runSearch(query, searchId) {
 }
 
 function sortMovies(sortValue) {
+  // Sorting is done entirely client-side because the detailed data is already in memory.
+  // That makes the UI feel faster and avoids extra API calls.
   // Skip sorting work when there is nothing to sort.
   if (!movieDetails.length) return;
 
@@ -222,7 +239,9 @@ function sortMovies(sortValue) {
   });
 }
 
-// Renders a single movie card for the grid.
+// Builds the HTML for one movie card.
+// Template strings are convenient here, but they also mean the app is trusting
+// API-provided text enough to insert it into HTML, which is a real interview discussion point.
 function buildMovieCardMarkup(movie) {
   // Defensive formatting for missing OMDB fields.
   const posterSrc =
@@ -248,6 +267,7 @@ function buildMovieCardMarkup(movie) {
 }
 
 // Opens the modal with detailed info for the selected movie.
+// This is where cached application state is translated into visible UI state.
 function openMovieDetailsModal(imdbID) {
   // Find the clicked movie inside the already-fetched detailed result set.
   const movie = movieDetails.find((item) => item.imdbID === imdbID);
@@ -275,8 +295,9 @@ function openMovieDetailsModal(imdbID) {
     movie.Type && movie.Type !== "N/A"
       ? movie.Type.charAt(0).toUpperCase() + movie.Type.slice(1)
       : "Unknown";
-  // innerHTML is used intentionally because each field includes label markup.
-  // A production app would usually build these nodes with createElement for stronger XSS safety.
+  // innerHTML is used here for convenience because the labels include small bits of markup.
+  // In production, a safer approach is to build these nodes with createElement/textContent
+  // so remote API content is never interpreted as HTML.
   meta.innerHTML = `<div><b>Released:</b> ${movie.Released || "Unknown"}</div><div><b>Genre:</b> ${movie.Genre || "Unknown Genre"}</div><div><b>Type:</b> ${type}</div>`;
   runtime.innerHTML = `<div><b>Runtime:</b> ${movie.Runtime && movie.Runtime !== "N/A" ? movie.Runtime : "Unknown runtime"}</div>`;
   cast.innerHTML = `<div><b>Director:</b> ${movie.Director || "Unknown"}</div><div><b>Cast:</b> ${movie.Actors && movie.Actors !== "N/A" ? movie.Actors : "Unknown cast"}</div>`;
@@ -286,7 +307,7 @@ function openMovieDetailsModal(imdbID) {
   modal.setAttribute("aria-hidden", "false");
 }
 
-// Closes the modal dialog.
+// Closes the modal dialog and restores its hidden accessibility state.
 function closeMovieDetailsModal() {
   const modal = document.querySelector("#movie-details-modal");
   // Reverse the same state change used to open the modal.
@@ -294,7 +315,8 @@ function closeMovieDetailsModal() {
   modal.setAttribute("aria-hidden", "true");
 }
 
-// Close modal when clicking the backdrop or pressing Escape.
+// Global listeners support standard dialog interactions.
+// The backdrop click closes only when the click lands outside the dialog itself.
 document.addEventListener("click", (event) => {
   const modal = document.querySelector("#movie-details-modal");
   // Close only when the backdrop itself is clicked, not the modal content.
@@ -305,5 +327,5 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") closeMovieDetailsModal();
 });
 
-// Initial render establishes a friendly empty state before the user types.
+// Initial render establishes the app's default state before any search occurs.
 renderMovieGrid([], "Use the search bar to find movies");

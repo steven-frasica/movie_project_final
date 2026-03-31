@@ -9,10 +9,15 @@
     <script src="index.js" defer></script>
   </head>
   <body>
-    <!-- Hero header: brand, search input, and sort control. -->
+    <!--
+      App header:
+      - communicates the product identity
+      - collects the user's search query
+      - exposes the client-side sort control
+    -->
     <header class="hero">
       <h1>Theater6</h1>
-      <h2>Choose Your Next Experience</h2>
+      <h2>Search For Your Next Experience</h2>
       <div class="hero__controls">
         <div class="search-bar">
           <input
@@ -46,7 +51,11 @@
       </div>
     </header>
     <main>
-      <!-- JavaScript replaces this container with loading, empty, or movie-card states. -->
+      <!--
+        This results region starts empty.
+        JavaScript treats it as the render target for all result states:
+        loading, empty, error, and populated movie cards.
+      -->
       <section id="movie-results" class="movie-results">
         <div class="movie-grid">
           <i class="fas fa-spinner movies__loading--spinner"></i>
@@ -75,7 +84,11 @@
       </div>
     </footer>
 
-    <!-- Modal dialog used to show the selected movie's expanded details. -->
+    <!--
+      Modal dialog for the selected movie.
+      JavaScript fills these placeholders from the cached movieDetails array
+      so the app does not need another API request when a card is clicked.
+    -->
     <div
       id="movie-details-modal"
       class="movie-details-modal"
@@ -104,7 +117,7 @@
           />
           <div class="movie-details-modal__body">
             <h3 id="movie-details-modal-title"></h3>
-            <!-- These placeholders are filled by JavaScript when a card is opened. -->
+            <!-- Individual content regions make it easier to update modal fields independently. -->
             <div
               id="movie-details-modal-meta"
               class="movie-details-modal__meta"
