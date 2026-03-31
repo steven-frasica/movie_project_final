@@ -5,22 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="config.js"></script>
     <script src="index.js" defer></script>
   </head>
   <body>
-    <!-- Header area: branding + user controls for searching and sorting movies. -->
     <section id="heading">
       <h1>Theater6</h1>
       <h2>Choose Your Next Experience</h2>
       <div class="header">
-        <!-- Search input uses oninput for live search as the user types. -->
-        <input
-          name="search"
-          placeholder="Type to Search"
-          type="text"
-          oninput="onSearchChange(event)"
-        />
-        <!-- Sort dropdown changes ordering of already-fetched movie details. -->
+        <div class="search-input-wrapper">
+          <input
+            id="search-input"
+            name="search"
+            placeholder="Type to Search"
+            type="text"
+            oninput="onSearchChange(event)"
+          />
+          <button
+            class="search-clear-button"
+            type="button"
+            onclick="clearSearchInput()"
+            aria-label="Clear search"
+          >
+            &times;
+          </button>
+        </div>
         <select
           class="filter"
           name="filter"
@@ -28,15 +37,14 @@
           onchange="filterMovies(event.target.value)"
         >
           <option value="" disabled selected>Sort</option>
-          <option value="NEW_TO_OLD">Most Recent</option>
-          <option value="OLD_TO_NEW">Oldest to Latest</option>
+          <option value="NEW_TO_OLD">Newest First</option>
+          <option value="OLD_TO_NEW">Oldest First</option>
           <option value="RATING_HIGH_TO_LOW">Rating, High to Low</option>
           <option value="RATING_LOW_TO_HIGH">Rating, Low to High</option>
         </select>
       </div>
     </section>
     <main>
-      <!-- Movie results are injected dynamically by JavaScript into .movie-list. -->
       <section id="movies">
         <div class="movie-list">
           <i class="fas fa-spinner movies__loading--spinner"></i>
@@ -44,7 +52,6 @@
       </section>
     </main>
     <footer>
-      <!-- Footer contains branding/copyright and attribution for icon usage. -->
       <div class="container">
         <div class="row row__column">
           <div>
@@ -53,19 +60,18 @@
             </figure>
           </div>
           <div class="footer__copyright">
-            Copyright © 2026 VISTA Steven Frasica
+            Copyright © 2026 Theater6 Steven Frasica
           </div>
           <a
             class="footer__attribution"
             href="https://www.flaticon.com/free-icons/movie"
             title="movie icons"
             target="_blank"
-            >Movie icons created by Freepik - Flaticon</a
+            >Movie icon created by Freepik - Flaticon</a
           >
         </div>
       </div>
     </footer>
-    <!-- Modal is hidden by default; JS fills its content and toggles visibility. -->
     <div id="plot-modal" class="plot-modal" aria-hidden="true">
       <div
         class="plot-modal__dialog"

@@ -1,8 +1,10 @@
 * {
+  /* Include padding and border inside each element's declared size. */
   box-sizing: border-box;
 }
 
 :root {
+  /* These custom properties act like reusable design tokens. */
   /* clamp(min, preferred, max) */
   /* Side padding for page sections, makes it responsive */
   --gutter: clamp(28px, 4vw, 56px);
@@ -17,6 +19,7 @@ body {
 }
 
 body {
+  /* Reset default margin and establish the page as a column layout. */
   margin: 0;
   min-height: 100vh;
   display: flex;
@@ -98,6 +101,12 @@ h2 {
   flex-wrap: wrap;
 }
 
+.search-input-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
 /* FOOTER */
 
 footer {
@@ -123,6 +132,7 @@ footer {
 }
 
 .row {
+  /* Shared centered wrapper. */
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -140,7 +150,7 @@ footer {
 
 .footer__link,
 .footer__copyright {
-  color: #a9d9e6;
+  color: #b6d9e7;
 }
 
 .footer__list {
@@ -156,7 +166,7 @@ footer {
   font-size: 12px;
   padding: 6px 0 2px;
   text-decoration: none;
-  color: #a9d9e6;
+  color: #b6d9e7;
 }
 
 .footer__logo {
@@ -170,16 +180,17 @@ footer {
   height: auto;
   border-radius: 0;
   /*
-    Footer logo color filter: tuned to match footer text (#a9d9e6).
+    Footer logo color filter: tuned to match footer text (#b6d9e7).
     This filter is for a white or light base logo.
   */
-  filter: invert(81%) sepia(16%) saturate(1042%) hue-rotate(170deg)
-    brightness(97%) contrast(92%);
+  filter: invert(90%) sepia(12%) saturate(542%) hue-rotate(166deg)
+    brightness(90%) contrast(92%);
 }
 
 /* Search bar and filter select */
 input,
 .filter {
+  /* Shared visual treatment keeps both controls in the same design system. */
   color: #b6d9e7;
   background-color: transparent;
   border-top: none;
@@ -192,13 +203,39 @@ input,
 
 input {
   min-width: 250px;
+  padding-right: 2rem;
 }
 /* placeholder color */
 input::placeholder {
-  color: #8fb6c8;
+  color: #a9d9e6;
+}
+
+.search-clear-button {
+  position: absolute;
+  right: 0.15rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: #b6d9e7;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0.15rem 0.25rem;
+  opacity: 1;
+  cursor: pointer;
+}
+
+.search-input-wrapper input:placeholder-shown + .search-clear-button {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.search-clear-button:hover {
+  color: #d2deed;
 }
 
 figure {
+  /* Treat the poster figure as a consistent frame. */
   display: flex;
   aspect-ratio: 2 / 3;
   flex-direction: column;
@@ -206,6 +243,7 @@ figure {
 }
 
 img {
+  /* object-fit prevents poster distortion. */
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -267,7 +305,7 @@ img {
 }
 
 .movie-list__message-text {
-  color: #d2deed;
+  color: #a9d9e6;
   font-size: 1.05rem;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -292,6 +330,7 @@ img {
 }
 
 .spinner {
+  /* CSS border animation creates the loading spinner. */
   width: 34px;
   height: 34px;
   border: 3px solid rgba(255, 255, 255, 0.25);
@@ -307,6 +346,7 @@ img {
 }
 
 .movie {
+  /* Relative positioning creates the containing block for the info overlay. */
   position: relative;
   align-self: start;
   overflow: hidden;
@@ -323,6 +363,7 @@ figure,
   /* 2:3 frame, larger posters for better visibility. */
   aspect-ratio: 2/3;
   display: grid;
+  /* Center the image inside the poster frame. */
   place-items: center;
   min-height: 260px;
   cursor: pointer;
@@ -340,6 +381,7 @@ figure,
 }
 
 .movie-card--info {
+  /* Hidden overlay that fades in over the poster on hover. */
   position: absolute;
   left: 8px;
   right: 8px;
@@ -402,8 +444,9 @@ figure,
 
 /* modal content */
 .plot-modal__dialog {
+  /* width:min(...) keeps the modal readable without overflowing the viewport. */
   color: #fff;
-  width: min(860px, 100%);
+  width: min(980px, 100%);
   max-height: 80vh;
   overflow: auto;
   padding: 18px;
@@ -419,14 +462,15 @@ figure,
 .plot-modal__content {
   /* Desktop layout: poster + text side-by-side. */
   display: grid;
-  grid-template-columns: minmax(160px, 220px) 1fr;
-  gap: 16px;
+  grid-template-columns: minmax(220px, 320px) 1fr;
+  gap: 24px;
   align-items: start;
 }
 
 .plot-modal__poster {
+  /* Reuse the same poster ratio inside the modal. */
   width: 100%;
-  max-width: 320px;
+  max-width: 100%;
   aspect-ratio: 2 / 3;
   object-fit: cover;
   border-radius: 10px;
@@ -434,6 +478,7 @@ figure,
 }
 
 .plot-modal__copy {
+  /* Prevent long text from forcing the grid wider than the modal allows. */
   min-width: 0;
 }
 
@@ -461,6 +506,7 @@ figure,
 .plot-modal__meta div,
 .plot-modal__runtime div,
 .plot-modal__cast div {
+  /* Treat each labeled detail as a separate row for readability. */
   margin-bottom: 6px;
   line-height: 1.5;
 }
@@ -489,10 +535,12 @@ figure,
 }
 
 .plot-modal__container {
+  /* Flex keeps the Plot label and paragraph aligned on one row. */
   display: flex;
 }
 
 .plot-modal__para {
+  /* Remove the default paragraph top margin so it lines up with the Plot label. */
   margin-top: 0;
   margin-left: 0.5rem;
 }
@@ -504,7 +552,7 @@ figure,
   }
 
   .plot-modal__poster {
-    max-width: 220px;
+    max-width: 260px;
     justify-self: center;
   }
 }
@@ -538,6 +586,7 @@ figure,
 
 @media (max-width: 640px) {
   input {
+    /* Let the search bar consume more width on smaller screens. */
     min-width: 80%;
   }
 }
@@ -552,6 +601,7 @@ figure,
 /* Larger posters on desktop (6-column layout) */
 @media (min-width: 1101px) {
   .movie-list {
+    /* Give desktop cards a taller baseline row height. */
     grid-auto-rows: minmax(380px, auto);
   }
 }
