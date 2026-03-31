@@ -222,7 +222,7 @@ function openPlotModal(imdbID) {
   meta.innerHTML = `<div><b>Released:</b> ${movie.Released || "Unknown"}</div><div><b>Genre:</b> ${movie.Genre || "Unknown Genre"}</div><div><b>Type:</b> ${type}</div>`;
   runtime.innerHTML = `<div><b>Runtime:</b> ${movie.Runtime && movie.Runtime !== "N/A" ? movie.Runtime : "Unknown runtime"}</div>`;
   cast.innerHTML = `<div><b>Director:</b> ${movie.Director || "Unknown"}</div><div><b>Cast:</b> ${movie.Actors && movie.Actors !== "N/A" ? movie.Actors : "Unknown cast"}</div>`;
-  text.textContent = movie.Plot && movie.Plot !== "N/A" ? movie.Plot : "Plot description unavailable.";
+  text.innerHTML = `<div class="plot-modal__container"><b>Plot:</b><p class="plot-modal__para"> ${movie.Plot && movie.Plot !== "N/A" ? movie.Plot : "Plot description unavailable."}</p></div>`;
   // Toggle modal visibility state and accessibility attribute together.
   modal.classList.add("plot-modal--open");
   modal.setAttribute("aria-hidden", "false");
