@@ -47,8 +47,20 @@ section {
 }
 
 #heading {
-  /* Top spacing for hero text + controls; left gutter inherited from section. */
-  padding: var(--section-gap) 0 calc(var(--section-gap) - 6px) var(--gutter);
+  margin: 0 auto;
+  /* Use the same horizontal geometry as movie section for exact left-edge alignment. */
+  padding-top: var(--section-gap);
+  padding-right: var(--gutter);
+  padding-bottom: calc(var(--section-gap) - 6px);
+  padding-left: 200px;
+}
+
+.search {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-decoration: none;
+  transform: none;
 }
 
 /* Site name */
@@ -68,8 +80,8 @@ h1 {
 h2 {
   margin: 8px 0 clamp(12px, 2vw, 20px);
   font-size: clamp(1.35rem, 1vw, 2.1rem);
-  color: #bdb9c0;
-  background: linear-gradient(120deg, #d4d1d8 0%, #b8b3bc 48%, #8e8a94 100%);
+  color: #a9d9e6;
+  background: linear-gradient(120deg, #c0e7f2 0%, #9ecad9 48%, #79a9bf 100%);
   /* Keep subtitle more subdued than h1 while preserving themed gradient. */
   -webkit-background-clip: text;
   background-clip: text;
@@ -127,6 +139,7 @@ footer {
 
 .footer__attribution {
   margin-top: 10px;
+  font-size: 12px;
   padding: 6px 0 2px;
   text-decoration: none;
   color: #f4c8d8;
@@ -148,7 +161,7 @@ footer {
 /* Search bar and filter select */
 input,
 .filter {
-  color: #f4f8ff;
+  color: #b6d9e7;
   background-color: transparent;
   border-top: none;
   border-right: none;
@@ -163,7 +176,7 @@ input {
 }
 /* placeholder color */
 input::placeholder {
-  color: #c2daf8;
+  color: #8fb6c8;
 }
 
 figure {
@@ -185,6 +198,7 @@ img {
   /* 6-column desktop grid that collapses through media queries below. */
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
+  align-items: start;
   gap: clamp(8px, 1.2vw, 14px);
   margin-top: clamp(4px, 1vw, 10px);
   padding-bottom: clamp(16px, 2.8vw, 30px);
@@ -193,22 +207,54 @@ img {
 .movie-list__message {
   /* Empty-state card styling (text gradient is on inner span). */
   grid-column: 1 / -1;
-  height: 3rem;
-  padding: 14px;
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 18px;
   text-align: center;
-  font-size: 1.125rem;
-  font-weight: 600;
-  background: #ffffff14;
-  border: 1px solid #7ee8ff73;
-  border-radius: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(126, 232, 255, 0.28);
+  background: linear-gradient(
+    160deg,
+    rgba(10, 26, 48, 0.72),
+    rgba(20, 43, 70, 0.58)
+  );
+  box-shadow: 0 10px 26px rgba(0, 6, 18, 0.35);
+}
+
+.movie-list__message-body {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.movie-list__message-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.85rem;
+  line-height: 1;
+  font-weight: 700;
+  color: #f3fbff;
+  border: 1px solid rgba(126, 232, 255, 0.78);
+  border-radius: 999px;
+  background: rgba(126, 232, 255, 0.3);
+  box-shadow: 0 0 0 1px rgba(6, 18, 36, 0.35) inset;
 }
 
 .movie-list__message-text {
-  color: #b7b2bc;
-  background: #b7b2bc;
+  color: #d2deed;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  background: none;
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: initial;
 }
 
 .movie-list__loading {
@@ -242,6 +288,9 @@ img {
 
 .movie {
   position: relative;
+  align-self: start;
+  overflow: hidden;
+  border-radius: 12px;
 }
 
 figure,
@@ -284,7 +333,9 @@ figure,
   right: 8px;
   bottom: 8px;
   max-height: calc(100% - 16px);
-  overflow: auto;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 11px;
   border-radius: 10px;
   color: #f4f8ff;
@@ -301,6 +352,11 @@ figure,
     transform 0.22s ease;
   pointer-events: none;
   cursor: pointer;
+}
+
+.movie-card--info h3,
+.movie-card--info p {
+  overflow-wrap: anywhere;
 }
 
 .plot-modal {
@@ -415,6 +471,19 @@ figure,
   .movie-list {
     /* 3 -> 2 columns for tablets/small laptops. */
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .movie-card--info {
+    padding: 9px;
+  }
+
+  .movie-card--info h3 {
+    font-size: 0.88rem;
+  }
+
+  .movie-card--info p {
+    font-size: 0.72rem;
+    line-height: 1.28;
   }
 }
 

@@ -55,7 +55,14 @@ async function renderMovies(movies, message = "No movies found.") {
   
   // Empty state: helpful message instead of a blank grid.
   if (!movies.length) {
-    movieListEl.innerHTML = `<p class="movie-list__message"><span class="movie-list__message-text">${message}</span></p>`;
+    movieListEl.innerHTML = `
+      <p class="movie-list__message" role="status" aria-live="polite">
+        <span class="movie-list__message-body">
+          <span class="movie-list__message-icon" aria-hidden="true">i</span>
+          <span class="movie-list__message-text">${message}</span>
+        </span>
+      </p>
+    `;
     return;
   }
 
