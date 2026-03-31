@@ -181,13 +181,11 @@ function showMovieInfo(movie) {
       ? movie.Poster
       : "https://via.placeholder.com/400x600?text=No+Poster";
   return `<div class="movie">
-    <div class="movie-card--poster" onclick="openPlotModal('${movie.imdbID}')">
-      <div class="movie-card__container">
+      <div class="movie-card__container" onclick="openPlotModal('${movie.imdbID}')">
         <figure>
           <img src="${posterSrc}" alt="${movie.Title || 'Movie'}">
         </figure>
       </div>
-    </div>
     <div class="movie-card--info" onclick="openPlotModal('${movie.imdbID}')">
       <h3>${movie.Title || 'Untitled'}</h3>
       <p><b>Released: ${movie.Released || 'Unknown'}</b></p>

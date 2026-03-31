@@ -66,7 +66,13 @@ h1 {
   letter-spacing: 0.1em;
   font-size: 2.25rem;
   color: #63f0dc;
-  background: linear-gradient(120deg, #7ee8ff 0%, #63f0dc 40%, #1de9b6 80%, #00bfae 100%);
+  background: linear-gradient(
+    120deg,
+    #7ee8ff 0%,
+    #63f0dc 40%,
+    #1de9b6 80%,
+    #00bfae 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -97,9 +103,21 @@ h2 {
 footer {
   /* Footer now matches the blue family used by the message bar. */
   background:
-    radial-gradient(700px 320px at 12% 0%, rgba(34, 78, 122, 0.26) 0%, transparent 62%),
-    radial-gradient(680px 300px at 88% 8%, rgba(24, 60, 100, 0.22) 0%, transparent 60%),
-    linear-gradient(165deg, rgba(10, 26, 48, 0.95) 0%, rgba(20, 43, 70, 0.9) 100%);
+    radial-gradient(
+      700px 320px at 12% 0%,
+      rgba(34, 78, 122, 0.26) 0%,
+      transparent 62%
+    ),
+    radial-gradient(
+      680px 300px at 88% 8%,
+      rgba(24, 60, 100, 0.22) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      165deg,
+      rgba(10, 26, 48, 0.95) 0%,
+      rgba(20, 43, 70, 0.9) 100%
+    );
   margin-top: auto;
   padding: 8px 0 12px;
 }
@@ -155,7 +173,8 @@ footer {
     Footer logo color filter: tuned to match footer text (#a9d9e6).
     This filter is for a white or light base logo.
   */
-  filter: invert(81%) sepia(16%) saturate(1042%) hue-rotate(170deg) brightness(97%) contrast(92%);
+  filter: invert(81%) sepia(16%) saturate(1042%) hue-rotate(170deg)
+    brightness(97%) contrast(92%);
 }
 
 /* Search bar and filter select */
@@ -192,6 +211,7 @@ img {
   object-fit: cover;
   display: block;
   border-radius: 12px;
+  transition: transform 0.2s ease;
 }
 
 .movie-list {
@@ -305,19 +325,10 @@ figure,
   display: grid;
   place-items: center;
   min-height: 260px;
-}
-
-.movie-card--poster {
   cursor: pointer;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 14px 28px #0007127a;
-  transition: transform 0.2s ease;
-  /* Hint the compositor for smoother hover transforms. */
-  will-change: transform;
 }
 
-.movie:hover .movie-card--poster {
+.movie:hover img {
   transform: translateY(-2px) scale(1.03);
 }
 
@@ -440,7 +451,6 @@ figure,
   margin: 0 0 6px;
 }
 
-
 .plot-modal__meta {
   margin: 10px 0 12px;
   color: #cbd6e4;
@@ -484,7 +494,7 @@ figure,
 
 .plot-modal__para {
   margin-top: 0;
-  margin-left: .5rem;
+  margin-left: 0.5rem;
 }
 
 @media (max-width: 760px) {
