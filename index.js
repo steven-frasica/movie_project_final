@@ -176,10 +176,6 @@ function filterMovies(filterValue) {
 // Renders a single movie card for the grid.
 function showMovieInfo(movie) {
   // Defensive formatting for missing OMDB fields.
-  const movieType =
-    movie.Type && movie.Type !== "N/A"
-      ? movie.Type.charAt(0).toUpperCase() + movie.Type.slice(1)
-      : "Unknown";
   const posterSrc =
     movie.Poster && movie.Poster !== "N/A"
       ? movie.Poster
@@ -188,18 +184,16 @@ function showMovieInfo(movie) {
     <div class="movie-card--poster" onclick="openPlotModal('${movie.imdbID}')">
       <div class="movie-card__container">
         <figure>
-          <img src="${posterSrc}" alt="${movie.Title || "Movie"}">
+          <img src="${posterSrc}" alt="${movie.Title || 'Movie'}">
         </figure>
       </div>
     </div>
     <div class="movie-card--info" onclick="openPlotModal('${movie.imdbID}')">
-      <h3>${movie.Title || "Untitled"}</h3>
-      <p><b>Director: ${movie.Director || "Unknown"}</b></p>
-      <p><b>Cast: ${movie.Actors || "Unknown"}</b></p>
-      <p><b>Released: ${movie.Released || "Unknown"}</b></p>
-      <p><b>Genre(s): ${movie.Genre || "Unknown"}</b></p>
-      <p><b>imdb Rating: ${movie.imdbRating || "N/A"}</b></p>
-      <p><b>Type: ${movieType}</b></p>
+      <h3>${movie.Title || 'Untitled'}</h3>
+      <p><b>Released: ${movie.Released || 'Unknown'}</b></p>
+      <p><b>Runtime: ${movie.Runtime && movie.Runtime !== 'N/A' ? movie.Runtime : 'Unknown'}</b></p>
+      <p><b>Genre: ${movie.Genre || 'Unknown'}</b></p>
+      <p><b>imdb Rating: ${movie.imdbRating || 'N/A'}</b></p>
     </div>
   </div>`;
 }
@@ -223,13 +217,12 @@ function openPlotModal(imdbID) {
   poster.src = posterSrc;
   poster.alt = `${movie.Title || "Movie"} poster`;
   title.textContent = movie.Title || "Untitled";
-  meta.textContent = `${movie.Released || "Unknown"} - ${movie.Genre || "Unknown Genre"}`;
-  runtime.textContent = `Runtime: ${movie.Runtime && movie.Runtime !== "N/A" ? movie.Runtime : "Unknown runtime"}`;
-  cast.textContent = `Cast: ${movie.Actors && movie.Actors !== "N/A" ? movie.Actors : "Unknown cast"}`;
-  text.textContent =
-    movie.Plot && movie.Plot !== "N/A"
-      ? movie.Plot
-      : "Plot description unavailable.";
+  // Style each field on its own line in the modal
+  const type = movie.Type && movie.Type !== "N/A" ? movie.Type.charAt(0).toUpperCase() + movie.Type.slice(1) : "Unknown";
+  meta.innerHTML = `<div><b>Released:</b> ${movie.Released || "Unknown"}</div><div><b>Genre:</b> ${movie.Genre || "Unknown Genre"}</div><div><b>Type:</b> ${type}</div>`;
+  runtime.innerHTML = `<div><b>Runtime:</b> ${movie.Runtime && movie.Runtime !== "N/A" ? movie.Runtime : "Unknown runtime"}</div>`;
+  cast.innerHTML = `<div><b>Director:</b> ${movie.Director || "Unknown"}</div><div><b>Cast:</b> ${movie.Actors && movie.Actors !== "N/A" ? movie.Actors : "Unknown cast"}</div>`;
+  text.textContent = movie.Plot && movie.Plot !== "N/A" ? movie.Plot : "Plot description unavailable.";
   // Toggle modal visibility state and accessibility attribute together.
   modal.classList.add("plot-modal--open");
   modal.setAttribute("aria-hidden", "false");

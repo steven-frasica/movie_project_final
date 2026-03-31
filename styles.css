@@ -440,10 +440,19 @@ figure,
   margin: 0 0 6px;
 }
 
+
 .plot-modal__meta {
   margin: 10px 0 12px;
   color: #cbd6e4;
   font-size: 0.9rem;
+}
+
+/* Style each field in the modal to appear on its own line with spacing */
+.plot-modal__meta div,
+.plot-modal__runtime div,
+.plot-modal__cast div {
+  margin-bottom: 6px;
+  line-height: 1.5;
 }
 
 .plot-modal__runtime {
