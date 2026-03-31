@@ -9,6 +9,12 @@ let searchDebounceTimer;
 // - tracks the most recent search to avoid race conditions
 let latestSearchId = 0;
 
+// This file follows a common front-end flow:
+// 1. Read user input from the DOM.
+// 2. Fetch data from the OMDb API.
+// 3. Normalize/sort the data in memory.
+// 4. Render the current UI state back into the DOM.
+
 // Converts raw OMDB error messages into friendlier UI text.
 // Keeps API wording separate from user-facing wording.
 function mapOmdbErrorMessage(errorMessage) {
@@ -63,6 +69,7 @@ async function renderMovies(movies, message = "No movies found.") {
 }
 
 async function onSearchChange(event) {
+  // event.target is the <input>, so its current value is the live search text.
   // Normalize the input so accidental spaces do not trigger bad searches.
   const query = event.target.value.trim();
   // Each keystroke gets a unique id so we can ignore stale responses later.
@@ -126,6 +133,9 @@ async function runSearch(query, searchId) {
     }
 
     // Fetch full details for each movie card (up to 6).
+    // This is a deliberate two-step API strategy:
+    // - first call: quick broad search by title
+    // - second calls: richer details by imdbID for the cards/modal
     // Each request is isolated so one failure doesn't break the batch.
     const detailPromises = movies.slice(0, 6).map(async (movie) => {
       try {
@@ -174,6 +184,7 @@ function filterMovies(filterValue) {
   // requestAnimationFrame allows the loading state to paint before sort work runs.
   requestAnimationFrame(() => {
     // Spread into a new array so sort does not mutate the source state directly.
+    // Avoiding mutation makes state changes more predictable and easier to debug.
     let sortedMovies;
     if (filterValue === "NEW_TO_OLD") {
       sortedMovies = [...detailedMovies].sort((a, b) => {
@@ -219,6 +230,7 @@ function showMovieInfo(movie) {
       ? movie.Poster
       : "https://via.placeholder.com/400x600?text=No+Poster";
   // Return one complete movie-card template as a string.
+  // The imdbID acts as a stable unique identifier for later lookups.
   return `<div class="movie">
       <div class="movie-card__container" onclick="openPlotModal('${movie.imdbID}')">
         <figure>
@@ -254,6 +266,7 @@ function openPlotModal(imdbID) {
       ? movie.Poster
       : "https://via.placeholder.com/400x600?text=No+Poster";
   // These assignments connect application state to visible DOM content.
+  // textContent is preferred for plain text because it avoids parsing HTML.
   poster.src = posterSrc;
   poster.alt = `${movie.Title || "Movie"} poster`;
   title.textContent = movie.Title || "Untitled";
@@ -263,6 +276,7 @@ function openPlotModal(imdbID) {
       ? movie.Type.charAt(0).toUpperCase() + movie.Type.slice(1)
       : "Unknown";
   // innerHTML is used intentionally because each field includes label markup.
+  // A production app would usually build these nodes with createElement for stronger XSS safety.
   meta.innerHTML = `<div><b>Released:</b> ${movie.Released || "Unknown"}</div><div><b>Genre:</b> ${movie.Genre || "Unknown Genre"}</div><div><b>Type:</b> ${type}</div>`;
   runtime.innerHTML = `<div><b>Runtime:</b> ${movie.Runtime && movie.Runtime !== "N/A" ? movie.Runtime : "Unknown runtime"}</div>`;
   cast.innerHTML = `<div><b>Director:</b> ${movie.Director || "Unknown"}</div><div><b>Cast:</b> ${movie.Actors && movie.Actors !== "N/A" ? movie.Actors : "Unknown cast"}</div>`;
@@ -291,5 +305,5 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") closePlotModal();
 });
 
-// Initial empty state.
+// Initial render establishes a friendly empty state before the user types.
 renderMovies([], "Use the search bar to find movies");

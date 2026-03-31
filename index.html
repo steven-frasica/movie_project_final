@@ -9,6 +9,7 @@
     <script src="index.js" defer></script>
   </head>
   <body>
+    <!-- Hero section: brand, search input, and sort control. -->
     <section id="heading">
       <h1>Theater6</h1>
       <h2>Choose Your Next Experience</h2>
@@ -45,6 +46,7 @@
       </div>
     </section>
     <main>
+      <!-- JavaScript replaces this container with loading, empty, or movie-card states. -->
       <section id="movies">
         <div class="movie-list">
           <i class="fas fa-spinner movies__loading--spinner"></i>
@@ -72,6 +74,8 @@
         </div>
       </div>
     </footer>
+
+    <!-- Modal dialog used to show the selected movie's expanded details. -->
     <div id="plot-modal" class="plot-modal" aria-hidden="true">
       <div
         class="plot-modal__dialog"
@@ -96,6 +100,7 @@
           />
           <div class="plot-modal__copy">
             <h3 id="plot-modal-title"></h3>
+            <!-- These placeholders are filled by JavaScript when a card is opened. -->
             <p id="plot-modal-meta" class="plot-modal__meta"></p>
             <p id="plot-modal-runtime" class="plot-modal__runtime"></p>
             <p id="plot-modal-cast" class="plot-modal__cast"></p>

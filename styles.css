@@ -157,10 +157,6 @@ footer {
   margin: 14px 0 18px 0;
 }
 
-.footer__link {
-  padding: 0 8px;
-}
-
 .footer__attribution {
   margin-top: 10px;
   font-size: 12px;
@@ -347,6 +343,7 @@ img {
 
 .movie {
   /* Relative positioning creates the containing block for the info overlay. */
+  /* Because the info panel is absolutely positioned, it anchors to this card. */
   position: relative;
   align-self: start;
   overflow: hidden;
@@ -382,6 +379,7 @@ figure,
 
 .movie-card--info {
   /* Hidden overlay that fades in over the poster on hover. */
+  /* This is an example of progressive disclosure: details stay hidden until needed. */
   position: absolute;
   left: 8px;
   right: 8px;
@@ -416,6 +414,7 @@ figure,
 
 .plot-modal {
   /* Full-screen backdrop that dims the page behind dialog content. */
+  /* display:none keeps it out of layout until JS toggles the open class. */
   position: fixed;
   inset: 0;
   display: none;
@@ -461,6 +460,7 @@ figure,
 
 .plot-modal__content {
   /* Desktop layout: poster + text side-by-side. */
+  /* CSS Grid is a good fit here because the modal has two explicit columns. */
   display: grid;
   grid-template-columns: minmax(220px, 320px) 1fr;
   gap: 24px;
